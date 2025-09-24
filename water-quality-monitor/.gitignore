@@ -3,3 +3,4 @@ venv/
 __pycache__/
 water_quality_data.xlsx
 local_test_file.py
+.vscode/
