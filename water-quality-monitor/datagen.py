@@ -1,10 +1,19 @@
 # Import relevant modules and classes
-import openpyxl, datetime
+import datetime, random
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Alignment
 from datetime import datetime
+from helper import decimal_trunc
 
+# Create random float values to pass into the sensors
+sensor_list = ["Temperature", "pH", "Condensation", "Nitrate"]
+for sensor_index, sensor_value in enumerate(sensor_list):
+    # Random values
+    sensor_value = (random.uniform(20,60))
+    sensor_value = float(decimal_trunc(sensor_value, 2))
+    sensor_list[sensor_index] = (sensor_value)
+    
 # Function to append data from the sensors into the next new row on the spreadsheet
 def add_data(sensor1_temp, sensor2_ph, sensor3_cond, sensor4_nit):
     timestamp = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
@@ -52,11 +61,11 @@ if file_validity == False:
             cell.alignment = Alignment(horizontal='center')
     
     # Dummy values to test functionality, with the "timestamp" field real-time testing is enabled
-    add_data(22.5, 7.4, 15.3, 3.3)
-    
+    add_data(sensor_list[0], sensor_list[1], sensor_list[2], sensor_list[3])
+
 else:
     # Case where the workbook was found
     wb = load_workbook(filename = "water_quality_data.xlsx")
     ws = wb.active
     # Dummy values to test functionality, with the "timestamp" field real-time testing is enabled
-    add_data(22.0, 0.4, 15.0, 0.3)
+    add_data(sensor_list[0], sensor_list[1], sensor_list[2], sensor_list[3])
