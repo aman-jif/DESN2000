@@ -1,5 +1,6 @@
 import pandas as pd
 from dash import Dash, html, dcc
+from dash.dependencies import Input, Output
 import plotly.graph_objects as graphobj
 
 # Included modules to repeatedly generate "new" data
@@ -22,27 +23,64 @@ def make_figure(x, y, title, yaxis_label):
                          yaxis_title=yaxis_label)
     )
 
+# graphs = []
+# if 'Error' not in activewks.columns and not activewks.empty:
+#     time = activewks['Timestamp']
+#     graphs = [
+#         dcc.Graph(
+#             figure=make_figure(time, activewks['Temperature (Sensor 1)'], 
+#                                "Temperature vs Time", "Temperature"), id='temp-graph'
+#         ),
+#         dcc.Graph(
+#             figure=make_figure(time, activewks['pH (Sensor 2)'], "pH vs Time", "pH"),
+#             id='ph-graph'
+#         ),
+#         dcc.Graph(
+#             figure=make_figure(time, activewks['Conductivity (Sensor 3)'], "Conductivity vs Time", 
+#                                "Conductivity"), id='cond-graph'
+#         ),
+#         dcc.Graph(
+#             figure=make_figure(time, activewks['Nitrates (Sensor 4)'], "Nitrates vs Time", 
+#                                "Nitrates"), id='nitr-graph'
+#         ),
+#     ]
 graphs = []
 if 'Error' not in activewks.columns and not activewks.empty:
     time = activewks['Timestamp']
     graphs = [
-        dcc.Graph(
-            figure=make_figure(time, activewks['Temperature (Sensor 1)'], 
-                               "Temperature vs Time", "Temperature"), id='temp-graph'
-        ),
-        dcc.Graph(
-            figure=make_figure(time, activewks['pH (Sensor 2)'], "pH vs Time", "pH"),
-            id='ph-graph'
-        ),
-        dcc.Graph(
-            figure=make_figure(time, activewks['Conductivity (Sensor 3)'], "Conductivity vs Time", 
-                               "Conductivity"), id='cond-graph'
-        ),
-        dcc.Graph(
-            figure=make_figure(time, activewks['Nitrates (Sensor 4)'], "Nitrates vs Time", 
-                               "Nitrates"), id='nitr-graph'
-        ),
+        dcc.Graph(id='temp-graph'),
+        dcc.Graph(id='ph-graph'),
+        dcc.Graph(id='cond-graph'),
+        dcc.Graph(id='nitr-graph'),
     ]
+    
+@app.callback(
+    [
+        Output('temp-graph', 'figure'),
+        Output('ph-graph', 'figure'),
+        Output('cond-graph', 'figure'),
+        Output('nitr-graph', 'figure'),      
+    ],
+    Input('refresh_interval', 'n_intervals')
+)
+
+def update_graphs(n_intervals):
+        datagen.add_random_data()
+        datagenDelay.sleep(0.5)
+        
+        updated_data = pd.read_excel("water_quality_data.xlsx")
+        
+        updated_time = updated_data['Timestamp']
+        update_temp = make_figure(updated_time, updated_data['Temperature (Sensor 1)'], 
+                               "Temperature vs Time", "Temperature")
+        update_ph = make_figure(updated_time, updated_data['pH (Sensor 2)'], 
+                               "pH vs Time", "pH")
+        update_cond = make_figure(updated_time, updated_data['Conductivity (Sensor 3)'], 
+                               "Conductivity vs Time", "Conductivity")
+        update_nitr = make_figure(updated_time, updated_data['Nitrates (Sensor 4)'], 
+                               "Nitrates vs Time", "Nitrates")
+        return update_temp, update_ph, update_cond, update_nitr
+
 
 app.layout = html.Div([
     html.H1(
@@ -70,6 +108,11 @@ app.layout = html.Div([
                 }
             )], 
         style= {'textAlign': 'center'}),
+    dcc.Interval(
+        id='refresh_interval',
+        interval=10*1000,
+        n_intervals=0
+    ),
     *graphs
 ])
 
