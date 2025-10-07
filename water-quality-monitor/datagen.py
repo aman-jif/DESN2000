@@ -7,17 +7,20 @@ from datetime import datetime
 from helper import decimal_trunc
 
 # Create random float values to pass into the sensors
-sensor_list = ["Temperature", "pH", "Condensation", "Nitrate"]
-for sensor_index, sensor_value in enumerate(sensor_list):
+def generate_random_sensor_data():
+    sensor_list = ["Temperature", "pH", "Condensation", "Nitrate"]
+    for sensor_index, sensor_value in enumerate(sensor_list):
     # Random values
-    sensor_value = (random.uniform(20,60))
-    sensor_value = float(decimal_trunc(sensor_value, 2))
-    sensor_list[sensor_index] = (sensor_value)
+        sensor_value = float(decimal_trunc(random.uniform(20,60), 2))
+        sensor_list[sensor_index] = (sensor_value)
+    return sensor_list
     
-# Function to append data from the sensors into the next new row on the spreadsheet
-def add_data(sensor1_temp, sensor2_ph, sensor3_cond, sensor4_nit):
+    
+# Function to append data from the sensors into the next new row on the spreadsheet    
+def add_random_data():
+    rand_sensor_values = generate_random_sensor_data()
     timestamp = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
-    new_data = [timestamp, sensor1_temp, sensor2_ph, sensor3_cond, sensor4_nit]
+    new_data = [timestamp] + rand_sensor_values
     ws.append(new_data)
     wb.save('water_quality_data.xlsx')
 
@@ -61,11 +64,11 @@ if file_validity == False:
             cell.alignment = Alignment(horizontal='center')
     
     # Dummy values to test functionality, with the "timestamp" field real-time testing is enabled
-    add_data(sensor_list[0], sensor_list[1], sensor_list[2], sensor_list[3])
+    add_random_data()
 
 else:
     # Case where the workbook was found
     wb = load_workbook(filename = "water_quality_data.xlsx")
     ws = wb.active
     # Dummy values to test functionality, with the "timestamp" field real-time testing is enabled
-    add_data(sensor_list[0], sensor_list[1], sensor_list[2], sensor_list[3])
+    add_random_data()
