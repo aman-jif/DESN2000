@@ -23,27 +23,6 @@ def make_figure(x, y, title, yaxis_label):
                          yaxis_title=yaxis_label)
     )
 
-# graphs = []
-# if 'Error' not in activewks.columns and not activewks.empty:
-#     time = activewks['Timestamp']
-#     graphs = [
-#         dcc.Graph(
-#             figure=make_figure(time, activewks['Temperature (Sensor 1)'], 
-#                                "Temperature vs Time", "Temperature"), id='temp-graph'
-#         ),
-#         dcc.Graph(
-#             figure=make_figure(time, activewks['pH (Sensor 2)'], "pH vs Time", "pH"),
-#             id='ph-graph'
-#         ),
-#         dcc.Graph(
-#             figure=make_figure(time, activewks['Conductivity (Sensor 3)'], "Conductivity vs Time", 
-#                                "Conductivity"), id='cond-graph'
-#         ),
-#         dcc.Graph(
-#             figure=make_figure(time, activewks['Nitrates (Sensor 4)'], "Nitrates vs Time", 
-#                                "Nitrates"), id='nitr-graph'
-#         ),
-#     ]
 graphs = []
 if 'Error' not in activewks.columns and not activewks.empty:
     time = activewks['Timestamp']
@@ -117,7 +96,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == "__main__":
-    app.run(debug=True) # Left in debug mode for dev purposes 
-    # while True:
-    #     datagen.add_data("100", "100", "100", "100")
-    #     datagenDelay.sleep(6)
+    app.run(debug=True) 
