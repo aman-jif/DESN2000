@@ -81,14 +81,16 @@ app.layout = html.Div([
         style={
             'textAlign': 'center',
             'font-family': 'Open Sans, verdana, Helvetica, arial, sans-serif',
-            'font-weight': '400'
+            'font-weight': '400',
+            # 'background-color': '#87CEEB'
             }), 
     html.H4(
         "These are the collated data plots for our various sensors aboard Abzu.", 
         style={
             'textAlign': 'center',
             'font-family': 'Open Sans, verdana, Helvetica, arial, sans-serif',
-            'font-weight': '400'
+            'font-weight': '400',
+            # 'background-color': '#87CEEB'
             }),
     html.Div([
         html.Img(
@@ -97,31 +99,34 @@ app.layout = html.Div([
             style={
                 'width': '50%', 
                 'max-width': '500px', 
-                'height': 'auto'
+                'height': 'auto',
+                # 'background-color': '#87CEEB'
                 }
             )], 
         style= {'textAlign': 'center'}),
-    dcc.Tabs([
-        dcc.Tab(label='Temperature', children=[
-            dcc.Graph(id='temp-graph')
+    html.Div([    
+        dcc.Tabs([
+            dcc.Tab(label='Temperature', children=[
+                dcc.Graph(id='temp-graph')
+            ]),
+            dcc.Tab(label='pH', children=[
+                dcc.Graph(id='ph-graph')
+            ]),
+            dcc.Tab(label='Conductivity', children=[
+                dcc.Graph(id='cond-graph')
+            ]),
+            dcc.Tab(label='Nitrates', children=[
+                dcc.Graph(id='nitr-graph')
+            ]),
         ]),
-        dcc.Tab(label='pH', children=[
-            dcc.Graph(id='ph-graph')
-        ]),
-        dcc.Tab(label='Conductivity', children=[
-            dcc.Graph(id='cond-graph')
-        ]),
-        dcc.Tab(label='Nitrates', children=[
-            dcc.Graph(id='nitr-graph')
-        ]),
+        dcc.Interval(
+            id='refresh_interval',
+            interval=10*1000,
+            n_intervals=0
+        ),
     ]),
-    dcc.Interval(
-        id='refresh_interval',
-        interval=10*1000,
-        n_intervals=0
+    ], 
     ),
-    # *graphs
-])
 
 if __name__ == "__main__":
     app.run(debug=True) 
